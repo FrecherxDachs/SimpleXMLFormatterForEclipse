@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+  <extension point="org.eclipse.ui.commands">
+    <command
+        name="Format Indentation"
+        description="Format Indentation"
+        categoryId="org.eclipse.ui.category.edit"
+        id="org.eclipse.wst.sse.ui.format.document.indentation">
+    </command>
+  </extension>
+  
+  <extension point="org.eclipse.ui.bindings">
+    <key
+        sequence="M1+M2+I"
+        contextId="org.eclipse.wst.sse.ui.structuredTextEditorScope"
+        commandId="org.eclipse.wst.sse.ui.format.document.indentation"
+        schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+    </key>
+  </extension>
+  
+  <extension point="org.eclipse.ui.handlers">
+    <handler
+        class="xml_formatter.handler.SimpleIndentationFormatterHandler"
+        commandId="org.eclipse.wst.sse.ui.format.document.indentation">
+    </handler>
+  </extension>
+  
+  <extension point="org.eclipse.ui.menus">
+    <menuContribution locationURI="popup:sourcePopupMenuId?after=FormatElements">
+      <command 
+          commandId="org.eclipse.wst.sse.ui.format.document.indentation" 
+          id="IndentDocument" 
+          mnemonic="I" 
+          style="push">
+            <visibleWhen checkEnabled="false">
+              <and>
+                <reference definitionId="org.eclipse.wst.sse.ui.sseActiveContext.definition" />
+                <not><reference definitionId="org.eclipse.wst.sse.ui.hideFormat" /></not>
+              </and>
+            </visibleWhen>
+        </command>
+    </menuContribution>
+  </extension>
+  
+</plugin>
