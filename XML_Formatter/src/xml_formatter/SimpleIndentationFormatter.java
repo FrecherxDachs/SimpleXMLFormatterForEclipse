@@ -26,7 +26,7 @@ public class SimpleIndentationFormatter {
   private int level;
   private int node_counter;
   
-  private int last_pos;
+  private int last_index;
   private int last_level;
   private int last_context;
   
@@ -47,12 +47,16 @@ public class SimpleIndentationFormatter {
     level = 0;
     node_counter = 0;
     new_doc = new StringBuilder(buffer.length * 2);
-    last_pos = 0;
+    last_index = 0;
     char c;
     
     index = -1;
     
     while (buffer[++index] != EOF) {
+      
+//      handleLinebreak(true);
+//      consumeWhitespaces(true);
+//      last_index = index;
       
       if (buffer[index] == '<') {
         c = buffer[++index];
@@ -122,8 +126,6 @@ public class SimpleIndentationFormatter {
         msgbox.open();
         return;
       }
-      
-      new_doc.append('\n');
     }
     
     handleLinebreak(false);
@@ -152,7 +154,7 @@ public class SimpleIndentationFormatter {
         return;
       }
       
-      last_pos = index;
+      last_index = index;
       last_context = context;
     }
     
@@ -166,7 +168,7 @@ public class SimpleIndentationFormatter {
     }
     
     new_doc.append(indent(last_level));
-    new_doc.append(buffer, last_pos, index - last_pos);
+    new_doc.append(buffer, last_index, index - last_index);
     
     if (newline) {
       new_doc.append('\n');
@@ -208,5 +210,32 @@ public class SimpleIndentationFormatter {
     }
 
     return sb.toString();
+  }
+  
+  // TODO: index++ anpassen
+  private void consumeWhitespaces(boolean inclusiveLinebreak) {
+    
+    while (buffer[++index] != EOF) {
+      
+      if (inclusiveLinebreak) {
+        if (buffer[index] == 13) {
+          if (buffer[index + 1] == 10) {
+            index++;
+          }
+          inclusiveLinebreak = false;
+        } else if (buffer[index] == 10) {
+          inclusiveLinebreak = false;
+        }
+      }
+      
+      if (buffer[index] != ' ' && buffer[index] != '\t') {
+        index--;
+        return;
+      }
+    }
+  }
+  
+  private void consumeLinebreak() {
+    
   }
 }
