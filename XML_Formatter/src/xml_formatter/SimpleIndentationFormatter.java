@@ -24,6 +24,7 @@ public class SimpleIndentationFormatter {
   private char[] buffer;
   private int index;
   private int level;
+  private int node_counter;
   
   private int last_pos;
   private int last_level;
@@ -44,6 +45,7 @@ public class SimpleIndentationFormatter {
     System.arraycopy(document.get().toCharArray(), 0, buffer, 0, size);
     buffer[size] = EOF;
     level = 0;
+    node_counter = 0;
     new_doc = new StringBuilder(buffer.length * 2);
     last_pos = 0;
     char c;
@@ -120,6 +122,8 @@ public class SimpleIndentationFormatter {
         msgbox.open();
         return;
       }
+      
+      new_doc.append('\n');
     }
     
     handleLinebreak(false);
